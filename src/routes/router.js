@@ -19,18 +19,32 @@ const routes = {
 }
 
 export function handleRoute() {
-    const path = window.location.pathname || '/login';
+    const path = window.location.pathname
+
+    if(path === '/'){
+        history.pushState(null, '', '/login')
+        loginView()
+        return
+    }
+
     const route = routes[path];
 
     if (!route) {
-        window.history.replaceState({}, '', '/login');
-        return handleRoute();
+        history.pushState(null, '', '/login')
+        loginView()
+        return
     }
 
     if (route.private && !getSession()) {
-        window.history.replaceState({}, '', '/login');
-        return handleRoute();
+        history.pushState(null, '', '/login')
+        loginView()
+        return
     }
 
     route.view();
+}
+
+export function navigate(path){
+    history.pushState(null, '', path)
+    handleRoute()
 }
